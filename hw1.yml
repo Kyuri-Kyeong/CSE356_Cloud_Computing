@@ -1,0 +1,34 @@
+---
+- hosts: all
+  tasks:
+  - name: Install nginx
+    apt: name=nginx state=present
+    become: yes
+  - name: Clone a github repository
+    git:
+      repo: https://github.com/Kyuri-Kyeong/CSE356_Cloud_Computing
+      dest: /var/www/hw1
+      clone: yes
+      update: yes
+    become: yes
+  - name: Copy the html    
+    copy:
+      remote_src: true
+      src: /var/www/hw1/hw0.html
+      dest: /var/www/html
+    become: yes
+  - name: Copy the jpg
+    copy:
+      remote_src: true
+      src: /var/www/hw1/sea.jpg
+      dest: /var/www/html
+    become: yes
+  - name: Copy the config 
+    copy:
+      remote_src: true
+      src: /var/www/hw1/hw0
+      dest: /etc/nginx/sites-enabled/hw0
+    become: yes
+  - name: restart nginx
+    service: name=nginx state=restarted enabled=yes
+    become: yes
